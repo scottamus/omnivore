@@ -13,5 +13,12 @@ namespace OmnivoreClassLibraryTests
         {
             await TestConnection.TestGetLocation_Async();
         }
+
+        [TestMethod]
+        public async Task TestGetInterface_Async()
+        {
+            await TestConnection.TestGetInterface_Async();
+        }
+
     }
 }
