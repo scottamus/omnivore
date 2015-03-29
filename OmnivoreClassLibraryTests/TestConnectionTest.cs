@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OmnivoreClassLibrary;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace OmnivoreClassLibraryTests
 {
@@ -35,52 +36,50 @@ namespace OmnivoreClassLibraryTests
         [TestMethod]
         public async Task TestGetLocationsCollection_Async()
         {
-            LocationsCollection output = await TestConnection.TestGetLocationsCollection_Async();
+            List<Location> output = await TestConnection.TestGetLocationsCollection_Async();
             Assert.IsNotNull(output);
-            Assert.IsNotNull(output._embedded);
-            Assert.IsNotNull(output._embedded.locations);
-            Assert.IsTrue(output._embedded.locations.Count > 0);
+            Assert.IsTrue(output.Count > 0);
         }
 
-        [TestMethod]
-        public async Task TestGetMenuLinks_Async()
-        {
-            MenuLinks output = await TestConnection.TestGetMenuLinks_Async();
-            Assert.IsNotNull(output);
-            Assert.IsNotNull(output._links);
-            Assert.IsNotNull(output._links.categories);
-            Assert.IsNotNull(output._links.items);
-            Assert.IsNotNull(output._links.modifiers);
-        }
+        //[TestMethod]
+        //public async Task TestGetMenuLinks_Async()
+        //{
+        //    MenuLinks output = await TestConnection.TestGetMenuLinks_Async();
+        //    Assert.IsNotNull(output);
+        //    Assert.IsNotNull(output._links);
+        //    //Assert.IsNotNull(output._links.categories);
+        //    //Assert.IsNotNull(output._links.items);
+        //    //Assert.IsNotNull(output._links.modifiers);
+        //}
 
-        [TestMethod]
-        public async Task TestGetMenuItemsCollection_Async()
-        {
-            MenuItemsCollection output = await TestConnection.TestGetMenuItemsCollection_Async();
-            Assert.IsNotNull(output);
-            Assert.IsNotNull(output._embedded);
-            Assert.IsNotNull(output._embedded.menu_items);
-            Assert.IsTrue(output._embedded.menu_items.Count > 0);
-        }
+        //[TestMethod]
+        //public async Task TestGetMenuItemsCollection_Async()
+        //{
+        //    MenuItemsCollection output = await TestConnection.TestGetMenuItemsCollection_Async();
+        //    Assert.IsNotNull(output);
+        //    Assert.IsNotNull(output._embedded);
+        //    Assert.IsNotNull(output._embedded.menu_items);
+        //    Assert.IsTrue(output._embedded.menu_items.Count > 0);
+        //}
 
-        [TestMethod]
-        public async Task TestGetMenuCategoryCollection_Async()
-        {
-            MenuCategoryCollection output = await TestConnection.TestGetMenuCategoryCollection_Async();
-            Assert.IsNotNull(output);
-            Assert.IsNotNull(output._embedded);
-            Assert.IsNotNull(output._embedded.categories);
-            Assert.IsTrue(output._embedded.categories.Count > 0);
-        }
+        //[TestMethod]
+        //public async Task TestGetMenuCategoryCollection_Async()
+        //{
+        //    MenuCategoryCollection output = await TestConnection.TestGetMenuCategoryCollection_Async();
+        //    Assert.IsNotNull(output);
+        //    Assert.IsNotNull(output._embedded);
+        //    Assert.IsNotNull(output._embedded.categories);
+        //    Assert.IsTrue(output._embedded.categories.Count > 0);
+        //}
 
-        [TestMethod]
-        public async Task TestGetMenuModifierCollection_Async()
-        {
-            ModifierCollection output = await TestConnection.TestGetMenuModifierCollection_Async();
-            Assert.IsNotNull(output);
-            Assert.IsNotNull(output._embedded);
-            Assert.IsNotNull(output._embedded.modifiers);
-            Assert.IsTrue(output._embedded.modifiers.Count > 0);
-        }
+        //[TestMethod]
+        //public async Task TestGetMenuModifierCollection_Async()
+        //{
+        //    ModifierCollection output = await TestConnection.TestGetMenuModifierCollection_Async();
+        //    Assert.IsNotNull(output);
+        //    Assert.IsNotNull(output._embedded);
+        //    Assert.IsNotNull(output._embedded.modifiers);
+        //    Assert.IsTrue(output._embedded.modifiers.Count > 0);
+        //}
     }
 }

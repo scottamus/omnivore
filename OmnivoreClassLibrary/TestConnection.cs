@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OmnivoreClassLibrary
 {
@@ -33,9 +34,9 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
-        public static async Task<LocationsCollection> TestGetLocationsCollection_Async() // root https://api.omnivore.io/0.1/locations
+        public static async Task<List<Location>> TestGetLocationsCollection_Async() // root https://api.omnivore.io/0.1/locations
         {
-            LocationsCollection output = null;
+            List<Location> output = null;
 
             using (HttpClient client = new HttpClient())
             {
@@ -49,7 +50,10 @@ namespace OmnivoreClassLibrary
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonString = await response.Content.ReadAsStringAsync();
-                    output = JsonConvert.DeserializeObject<LocationsCollection>(jsonString);
+                    JObject loc = JObject.Parse(jsonString);
+                    JToken locToken = loc["_embedded"];
+                    JArray locArray = locToken["locations"] as JArray;
+                    output = locArray.ToObject<List<Location>>();
                 }
             }
 
@@ -73,36 +77,38 @@ namespace OmnivoreClassLibrary
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonString = await response.Content.ReadAsStringAsync();
-                    output = JsonConvert.DeserializeObject<Location>(jsonString);
+
+                    JObject loc = JObject.Parse(jsonString);
+                    output = loc.ToObject<Location>();
                 }
             }
 
             return output;
         }
 
-        public static async Task<MenuLinks> TestGetMenuLinks_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/
-        {
-            MenuLinks output = null;
+        //public static async Task<MenuLinks> TestGetMenuLinks_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/
+        //{
+        //    MenuLinks output = null;
 
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("https://api.omnivore.io/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+        //    using (HttpClient client = new HttpClient())
+        //    {
+        //        client.BaseAddress = new Uri("https://api.omnivore.io/");
+        //        client.DefaultRequestHeaders.Accept.Clear();
+        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //        client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
 
-                string apiVersion = AppSettings.API_Version;
-                string defaultLocationId = AppSettings.DefaultLocationId;
-                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/", "menu"));
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonString = await response.Content.ReadAsStringAsync();
-                    output = JsonConvert.DeserializeObject<MenuLinks>(jsonString);
-                }
-            }
+        //        string apiVersion = AppSettings.API_Version;
+        //        string defaultLocationId = AppSettings.DefaultLocationId;
+        //        HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/", "menu"));
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            string jsonString = await response.Content.ReadAsStringAsync();
+        //            output = JsonConvert.DeserializeObject<MenuLinks>(jsonString);
+        //        }
+        //    }
 
-            return output;
-        }
+        //    return output;
+        //}
 
         public static async Task<MenuItemsCollection> TestGetMenuItemsCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/
         {
