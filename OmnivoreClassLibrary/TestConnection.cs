@@ -11,37 +11,10 @@ namespace OmnivoreClassLibrary
 {
     public static class TestConnection
     {
-        public static async Task TestGetLocation_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/
+        public static async Task<Interface> TestGetInterface_Async() // root https://api.omnivore.io
         {
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("https://api.omnivore.io/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+            Interface output = null;
 
-                string apiVersion = AppSettings.API_Version;
-                string defaultLocationId = AppSettings.DefaultLocationId;
-                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/")); 
-                if (response.IsSuccessStatusCode)
-                {
-                    string locationString = await response.Content.ReadAsStringAsync();
-                    Location loc = JsonConvert.DeserializeObject<Location>(locationString);
-
-                    Console.WriteLine(String.Format("Location Id: {0}", loc.id));
-                    Console.WriteLine(String.Format("Location Name: {0}", loc.name));
-                    Console.WriteLine(String.Format("Location Display Name: {0}", loc.display_name));
-                    Console.WriteLine(String.Format("Location phone: {0}", loc.phone));
-                    Console.WriteLine(String.Format("Location status: {0}", loc.status));
-                    Console.WriteLine(String.Format("Location website: {0}", loc.website));
-                    Console.WriteLine(String.Format("Location created: {0}", loc.created));
-                    Console.WriteLine(String.Format("Location modified: {0}", loc.modified));
-                }
-            }
-        }
-
-        public static async Task TestGetInterface_Async() // root https://api.omnivore.io
-        {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://api.omnivore.io/");
@@ -52,15 +25,155 @@ namespace OmnivoreClassLibrary
                 HttpResponseMessage response = await client.GetAsync(String.Empty);
                 if (response.IsSuccessStatusCode)
                 {
-                    string locationString = await response.Content.ReadAsStringAsync();
-                    Interface inter = JsonConvert.DeserializeObject<Interface>(locationString);
-
-                    foreach (Version ver in inter.versions)
-                    {
-                        Console.WriteLine(ver.minor);
-                    }
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<Interface>(jsonString);
                 }
             }
+
+            return output;
+        }
+
+        public static async Task<LocationsCollection> TestGetLocationsCollection_Async() // root https://api.omnivore.io/0.1/locations
+        {
+            LocationsCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/", "locations"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<LocationsCollection>(jsonString);
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<Location> TestGetLocation_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/
+        {
+            Location output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                string defaultLocationId = AppSettings.DefaultLocationId;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<Location>(jsonString);
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<MenuLinks> TestGetMenuLinks_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/
+        {
+            MenuLinks output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                string defaultLocationId = AppSettings.DefaultLocationId;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/", "menu"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<MenuLinks>(jsonString);
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<MenuItemsCollection> TestGetMenuItemsCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/
+        {
+            MenuItemsCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                string defaultLocationId = AppSettings.DefaultLocationId;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/", "menu", "/", "items"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<MenuItemsCollection>(jsonString);
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<MenuCategoryCollection> TestGetMenuCategoryCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/categories/
+        {
+            MenuCategoryCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                string defaultLocationId = AppSettings.DefaultLocationId;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/", "menu", "/", "categories"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<MenuCategoryCollection>(jsonString);
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<ModifierCollection> TestGetMenuModifierCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/modifiers/
+        {
+            ModifierCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                string defaultLocationId = AppSettings.DefaultLocationId;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/locations/", defaultLocationId, "/", "menu", "/", "modifiers"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<ModifierCollection>(jsonString);
+                }
+            }
+
+            return output;
         }
     }
 }
