@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OmnivoreClassLibrary;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using OmnivoreClassLibrary.DataContracts.V01;
+using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
 namespace OmnivoreClassLibraryTests
 {
@@ -14,23 +16,23 @@ namespace OmnivoreClassLibraryTests
         {
             Location output = await TestConnection.TestGetLocation_Async();
             Assert.IsNotNull(output);
-            Assert.IsFalse(String.IsNullOrEmpty(output.id));
-            Assert.IsTrue(output.id == "zGibgKT9");
-            Assert.IsFalse(String.IsNullOrEmpty(output.name));
-            Assert.IsTrue(output.name == "Virtual POS");
-            Assert.IsFalse(String.IsNullOrEmpty(output.display_name));
-            Assert.IsTrue(output.display_name == "Virtual POS");
+            Assert.IsFalse(String.IsNullOrEmpty(output.Id));
+            Assert.IsTrue(output.Id == "zGibgKT9");
+            Assert.IsFalse(String.IsNullOrEmpty(output.Name));
+            Assert.IsTrue(output.Name == "Virtual POS");
+            Assert.IsFalse(String.IsNullOrEmpty(output.DisplayName));
+            Assert.IsTrue(output.DisplayName == "Virtual POS");
         }
 
         [TestMethod]
         public async Task TestGetInterface_Async()
         {
-            Interface output = await TestConnection.TestGetInterface_Async();
+            MainInterface output = await TestConnection.TestGetMainInterface_Async();
 
             Assert.IsNotNull(output);
-            Assert.IsNotNull(output.versions);
-            Assert.IsTrue(output.versions.Count == 1);
-            Assert.IsTrue(output.versions[0].minor == 1);
+            Assert.IsNotNull(output.Versions);
+            Assert.IsTrue(output.Versions.Count == 1);
+            Assert.IsTrue(output.Versions[0].MinorVersion == 1);
         }
 
         [TestMethod]

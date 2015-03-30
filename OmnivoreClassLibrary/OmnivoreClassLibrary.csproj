@@ -46,13 +46,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="DataContracts\V01\Address.cs" />
+    <Compile Include="DataContracts\V01\Category.cs" />
+    <Compile Include="DataContracts\V01\Enums\ApiVersionStatus.cs" />
+    <Compile Include="DataContracts\V01\Enums\LocationStatus.cs" />
+    <Compile Include="DataContracts\V01\Enums\State.cs" />
+    <Compile Include="DataContracts\V01\Item.cs" />
+    <Compile Include="DataContracts\V01\ItemBase.cs" />
+    <Compile Include="DataContracts\V01\Link.cs" />
+    <Compile Include="DataContracts\V01\LinkDetail.cs" />
+    <Compile Include="DataContracts\V01\Location.cs" />
+    <Compile Include="DataContracts\V01\MainInterface.cs" />
+    <Compile Include="DataContracts\V01\MenuItem.cs" />
+    <Compile Include="DataContracts\V01\Modifier.cs" />
+    <Compile Include="DataContracts\V01\OmnivoreBase.cs" />
+    <Compile Include="DataContracts\V01\PriceLevel.cs" />
+    <Compile Include="DataContracts\V01\Version.cs" />
+    <Compile Include="Helpers\CurrencyConverter.cs" />
+    <Compile Include="Helpers\UnixDateTimeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RevenueCenter.cs" />
     <Compile Include="TestConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessDomain\" />
+    <Folder Include="DataAccess\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
