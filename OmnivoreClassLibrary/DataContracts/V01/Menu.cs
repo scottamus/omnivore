@@ -12,7 +12,6 @@ namespace OmnivoreClassLibrary.DataContracts.V01
 {
     public class Menu : OmnivoreBase
     {
-        [JsonProperty("categories")]
-        public List<Category> Categories { get; set; }
+
     }
 }

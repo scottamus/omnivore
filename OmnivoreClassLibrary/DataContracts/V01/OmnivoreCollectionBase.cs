@@ -10,9 +10,12 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class ModifierGroupCollection : OmnivoreCollectionBase
+    public abstract class OmnivoreCollectionBase : OmnivoreBase
     {
-        [JsonProperty("_embedded")]
-        public Dictionary<string, List<ModifierGroup>> ModifierGroups { get; set; }
+        [JsonProperty("count")]
+        public int Count { get; set; }
+
+        [JsonProperty("limit")]
+        public int Limit { get; set; }
     }
 }

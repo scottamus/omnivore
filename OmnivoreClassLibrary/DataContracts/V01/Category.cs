@@ -18,6 +18,7 @@ namespace OmnivoreClassLibrary.DataContracts.V01
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        public List<MenuItem> MenuItems { get; set; }
+        [JsonProperty("_embedded")]
+        public Dictionary<string, List<MenuItem>> MenuItems { get; set; }
     }
 }

@@ -46,9 +46,9 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
-        public static async Task<List<Location>> TestGetLocationsCollection_Async() // root https://api.omnivore.io/0.1/locations
+        public static async Task<LocationCollection> TestGetLocationCollection_Async() // root https://api.omnivore.io/0.1/locations
         {
-            List<Location> output = null;
+            LocationCollection output = null;
 
             using (HttpClient client = new HttpClient())
             {
@@ -69,12 +69,7 @@ namespace OmnivoreClassLibrary
 
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
-
-                        JToken locToken = loc["_embedded"];
-                        JArray locArray = locToken["locations"] as JArray;
-                        output = locArray.ToObject<List<Location>>(serializer);
-
-                        // don't need to load links for this, because we only want the list of locations..
+                        output = loc.ToObject<LocationCollection>(serializer);
                     }
                 }
             }
@@ -151,9 +146,9 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
-        public static async Task<Menu> TestGetMenuWithCategoriesAndItems_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/categories/
+        public static async Task<CategoryCollection> TestGetMenuCategoriesAndItems_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/categories/
         {
-            Menu output = null;
+            CategoryCollection output = null;
 
             using (HttpClient client = new HttpClient())
             {
@@ -176,45 +171,7 @@ namespace OmnivoreClassLibrary
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
-                        output = menuTmp.ToObject<Menu>(serializer);
-
-                        // load embedded categories and items
-                        Category categoryTmp;
-                        MenuItem menuItemTmp;
-                        JToken menuToken = menuTmp["_embedded"];
-                        JArray catArray = menuToken["categories"] as JArray;
-                        foreach (JToken category in catArray)
-                        {
-                            // safety check
-                            if (output.Categories == null)
-                            {
-                                output.Categories = new List<Category>();
-                            }
-
-                            categoryTmp = category.ToObject<Category>(serializer);
-                            JObject tmpCatObj = JObject.Parse(category.ToString()); // need to convert JToken to JObject here, would like to improve this
-
-                            // add items for this category -- TODO: make recursive method if possible, to avoid this
-                            JToken catToken = tmpCatObj["_embedded"];
-                            JArray itemArray = catToken["items"] as JArray;
-                            foreach (JToken item in itemArray)
-                            {
-                                // safety check
-                                if (categoryTmp.MenuItems == null)
-                                {
-                                    categoryTmp.MenuItems = new List<MenuItem>();
-                                }
-
-                                menuItemTmp = item.ToObject<MenuItem>(serializer);
-                                JObject tmpItemObj = JObject.Parse(item.ToString()); // need to convert JToken to JObject here, would like to improve this
-
-                                // add to collection
-                                categoryTmp.MenuItems.Add(menuItemTmp);
-                            }
-
-                            // add to collection
-                            output.Categories.Add(categoryTmp);
-                        }
+                        output = menuTmp.ToObject<CategoryCollection>(serializer);
                     }
                 }
             }
@@ -222,9 +179,9 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
-        public static async Task<List<ModifierGroup>> TestGetMenuItemModifiers_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/rMTAbTjr/modifier_groups/
+        public static async Task<ModifierGroupCollection> TestGetMenuItemModifierGroupCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/rMTAbTjr/modifier_groups/
         {
-            List<ModifierGroup> output = null;
+            ModifierGroupCollection output = null;
 
             using (HttpClient client = new HttpClient())
             {
@@ -242,51 +199,12 @@ namespace OmnivoreClassLibrary
 
                     if (!String.IsNullOrEmpty(jsonString))
                     {
-                        JObject modGrpCollectionTmp = JObject.Parse(jsonString);
+                        JObject menuTmp = JObject.Parse(jsonString);
 
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
-                        ModifierGroupCollection mgc = modGrpCollectionTmp.ToObject<ModifierGroupCollection>(serializer);
-
-                        // load embedded modifier groups and modifiers
-                        // TODO: do a much better job parsing this so it isn't so manual
-                        ModifierGroup modGrpTmp;
-                        Modifier modifierTmp;
-                        JToken modGrpCollectionToken = modGrpCollectionTmp["_embedded"];
-                        JArray modGrpArray = modGrpCollectionToken["modifier_groups"] as JArray;
-                        foreach (JToken modGrp in modGrpArray)
-                        {
-                            // safety check
-                            if (output == null)
-                            {
-                                output = new List<ModifierGroup>();
-                            }
-
-                            modGrpTmp = modGrp.ToObject<ModifierGroup>(serializer);
-                            JObject tmpModGrpObj = JObject.Parse(modGrp.ToString()); // need to convert JToken to JObject here, would like to improve this
-
-                            // add items for this category -- TODO: make recursive method if possible, to avoid this
-                            JToken modGrpToken = tmpModGrpObj["_embedded"];
-                            JArray modArray = modGrpToken["options"] as JArray;
-                            foreach (JToken mod in modArray)
-                            {
-                                // safety check
-                                if (modGrpTmp.Modifiers == null)
-                                {
-                                    modGrpTmp.Modifiers = new List<Modifier>();
-                                }
-
-                                modifierTmp = mod.ToObject<Modifier>(serializer);
-                                JObject tmpItemObj = JObject.Parse(mod.ToString()); // need to convert JToken to JObject here, would like to improve this
-
-                                // add to collection
-                                modGrpTmp.Modifiers.Add(modifierTmp);
-                            }
-
-                            // add to collection
-                            output.Add(modGrpTmp);
-                        }
+                        output = menuTmp.ToObject<ModifierGroupCollection>(serializer);
                     }
                 }
             }

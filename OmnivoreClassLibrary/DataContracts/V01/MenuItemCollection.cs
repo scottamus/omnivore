@@ -10,9 +10,9 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class ModifierGroupCollection : OmnivoreCollectionBase
+    public class MenuItemCollection : OmnivoreCollectionBase
     {
         [JsonProperty("_embedded")]
-        public Dictionary<string, List<ModifierGroup>> ModifierGroups { get; set; }
+        public Dictionary<string, List<MenuItem>> MenuItems { get; set; }
     }
 }

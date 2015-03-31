@@ -10,12 +10,9 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class TableCollection : OmnivoreBase
+    public class TableCollection : OmnivoreCollectionBase
     {
-        [JsonProperty("count")]
-        public int Count { get; set; }
-
-        [JsonProperty("limit")]
-        public int Limit { get; set; }
+        [JsonProperty("_embedded")]
+        public Dictionary<string, List<Table>> Tables { get; set; }
     }
 }

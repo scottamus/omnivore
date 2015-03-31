@@ -27,6 +27,7 @@ namespace OmnivoreClassLibrary.DataContracts.V01
         [JsonProperty("required")]
         public bool Required { get; set; }
 
-        public List<Modifier> Modifiers { get; set; }
+        [JsonProperty("_embedded")]
+        public Dictionary<string, List<Modifier>> Modifiers { get; set; }
     }
 }

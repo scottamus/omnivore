@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OmnivoreClassLibrary;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using OmnivoreClassLibrary.DataContracts.V01;
 using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
@@ -39,14 +40,15 @@ namespace OmnivoreClassLibraryTests
         }
 
         [TestMethod]
-        public async Task TestGetLocationsCollection_Async()
+        public async Task TestGetLocationCollection_Async()
         {
-            List<Location> output = await TestConnection.TestGetLocationsCollection_Async();
+            LocationCollection output = await TestConnection.TestGetLocationCollection_Async();
             Assert.IsNotNull(output);
             Assert.IsTrue(output.Count > 0);
-            Assert.IsNotNull(output[0]);
-            Assert.IsNotNull(output[0].Links);
-            Assert.IsTrue(output[0].Links.Count == 9);
+            Assert.IsNotNull(output.Locations);
+            Assert.IsTrue(output.Locations.Count == 1);
+            Location l = (Location)output.Locations.First().Value[0];
+            Assert.IsTrue(l.Links.Count == 9);
         }
 
         [TestMethod]
@@ -59,24 +61,54 @@ namespace OmnivoreClassLibraryTests
         }
 
         [TestMethod]
-        public async Task TestGetMenuWithCategoriesAndItems_Async()
+        public async Task TestGetMenuCategoriesAndItems_Async()
         {
-            Menu output = await TestConnection.TestGetMenuWithCategoriesAndItems_Async();
+            CategoryCollection output = await TestConnection.TestGetMenuCategoriesAndItems_Async();
             Assert.IsNotNull(output);
-            Assert.IsNotNull(output.Categories);
-            Assert.IsTrue(output.Categories.Count == 3);
+            Assert.IsTrue(output.Count == 3);
             Assert.IsNotNull(output.Links);
             Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.Categories);
+            Assert.IsTrue(output.Categories.Count == 1);
+            Category c = (Category)output.Categories.First().Value[0];
+            Assert.IsNotNull(c);
+            Assert.IsTrue(c.Name == "Drinks");
+            Assert.IsNotNull(c.Links);
+            Assert.IsTrue(c.Links.Count == 2);
+            Assert.IsNotNull(c.MenuItems);
+            Assert.IsTrue(c.MenuItems.Count == 1);
+            List<MenuItem> menuItems = (List<MenuItem>)c.MenuItems.First().Value;
+            Assert.IsNotNull(menuItems);
+            Assert.IsTrue(menuItems.Count == 2);
+            MenuItem mi = menuItems[0];
+            Assert.IsNotNull(mi);
+            Assert.IsTrue(mi.Name == "Orange Juice");
+
         }
 
         [TestMethod]
-        public async Task TestGetMenuItemModifiers_Async()
+        public async Task TestGetMenuItemModifierGroupCollection_Async()
         {
-            List<ModifierGroup> output = await TestConnection.TestGetMenuItemModifiers_Async();
+            ModifierGroupCollection output = await TestConnection.TestGetMenuItemModifierGroupCollection_Async();
             Assert.IsNotNull(output);
             Assert.IsTrue(output.Count == 2);
-            Assert.IsNotNull(output[0].Links);
-            Assert.IsTrue(output[0].Links.Count == 2);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.ModifierGroups);
+            Assert.IsTrue(output.ModifierGroups.Count == 1);
+            ModifierGroup mg = (ModifierGroup)output.ModifierGroups.First().Value[0];
+            Assert.IsNotNull(mg);
+            Assert.IsTrue(mg.Name == "Temperature");
+            Assert.IsNotNull(mg.Links);
+            Assert.IsTrue(mg.Links.Count == 2);
+            Assert.IsNotNull(mg.Modifiers);
+            Assert.IsTrue(mg.Modifiers.Count == 1);
+            List<Modifier> mods = (List<Modifier>)mg.Modifiers.First().Value;
+            Assert.IsNotNull(mods);
+            Assert.IsTrue(mods.Count == 5);
+            Modifier m = mods[0];
+            Assert.IsNotNull(m);
+            Assert.IsTrue(m.Name == "Perfect");
         }
 
         [TestMethod]
