@@ -19,7 +19,7 @@ namespace OmnivoreClassLibrary.DataContracts.V01
         public bool InStock { get; set; }
 
         [JsonProperty("modifier_groups_count")]
-        public int ModifierGroupsCount { get; set; } // necessary?  guess I'll find out
+        public int ModifierGroupsCount { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

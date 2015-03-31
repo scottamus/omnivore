@@ -10,8 +10,12 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class LinkDetail
+    public class ModifierGroupCollection : OmnivoreBase
     {
+        [JsonProperty("count")]
+        public int Count { get; set; }
 
+        [JsonProperty("limit")]
+        public int Limit { get; set; }
     }
 }

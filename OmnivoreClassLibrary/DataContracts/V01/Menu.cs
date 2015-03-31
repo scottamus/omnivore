@@ -10,8 +10,9 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class LinkDetail
+    public class Menu : OmnivoreBase
     {
-
+        [JsonProperty("categories")]
+        public List<Category> Categories { get; set; }
     }
 }

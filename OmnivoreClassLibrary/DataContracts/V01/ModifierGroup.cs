@@ -10,7 +10,7 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class Category : OmnivoreBase
+    public class ModifierGroup : OmnivoreBase
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -18,6 +18,15 @@ namespace OmnivoreClassLibrary.DataContracts.V01
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        public List<MenuItem> MenuItems { get; set; }
+        [JsonProperty("maximum")]
+        public int? MaxAllowed { get; set; }
+
+        [JsonProperty("minimum")]
+        public int MinAllowed { get; set; }
+
+        [JsonProperty("required")]
+        public bool Required { get; set; }
+
+        public List<Modifier> Modifiers { get; set; }
     }
 }

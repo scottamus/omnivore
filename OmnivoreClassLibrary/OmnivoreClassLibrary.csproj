@@ -57,8 +57,11 @@
     <Compile Include="DataContracts\V01\LinkDetail.cs" />
     <Compile Include="DataContracts\V01\Location.cs" />
     <Compile Include="DataContracts\V01\MainInterface.cs" />
+    <Compile Include="DataContracts\V01\Menu.cs" />
     <Compile Include="DataContracts\V01\MenuItem.cs" />
     <Compile Include="DataContracts\V01\Modifier.cs" />
+    <Compile Include="DataContracts\V01\ModifierGroup.cs" />
+    <Compile Include="DataContracts\V01\ModifierGroupCollection.cs" />
     <Compile Include="DataContracts\V01\OmnivoreBase.cs" />
     <Compile Include="DataContracts\V01\PriceLevel.cs" />
     <Compile Include="DataContracts\V01\Version.cs" />

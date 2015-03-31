@@ -43,7 +43,7 @@ namespace OmnivoreClassLibrary.Helpers
         /// <exception cref="System.FormatException"></exception>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType != JsonToken.Integer || reader.TokenType != JsonToken.Float)
+            if (reader.TokenType != JsonToken.Integer && reader.TokenType != JsonToken.Float)
             {
                 throw new Exception(
                     String.Format("Unexpected token parsing date. Expected Integer or Float, got {0}.",
