@@ -64,6 +64,10 @@
     <Compile Include="DataContracts\V01\ModifierGroupCollection.cs" />
     <Compile Include="DataContracts\V01\OmnivoreBase.cs" />
     <Compile Include="DataContracts\V01\PriceLevel.cs" />
+    <Compile Include="DataContracts\V01\Table.cs" />
+    <Compile Include="DataContracts\V01\TableCollection.cs" />
+    <Compile Include="DataContracts\V01\Ticket.cs" />
+    <Compile Include="DataContracts\V01\Totals.cs" />
     <Compile Include="DataContracts\V01\Version.cs" />
     <Compile Include="Helpers\CurrencyConverter.cs" />
     <Compile Include="Helpers\UnixDateTimeConverter.cs" />

@@ -10,15 +10,12 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class Link
+    public class TableCollection : OmnivoreBase
     {
-        [JsonProperty("etag")]
-        public string Etag { get; set; }
+        [JsonProperty("count")]
+        public int Count { get; set; }
 
-        [JsonProperty("href")]
-        public string URL { get; set; }
-
-        [JsonProperty("profile")]
-        public string Profile { get; set; }
+        [JsonProperty("limit")]
+        public int Limit { get; set; }
     }
 }

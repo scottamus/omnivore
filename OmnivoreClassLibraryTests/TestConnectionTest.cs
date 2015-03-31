@@ -22,17 +22,20 @@ namespace OmnivoreClassLibraryTests
             Assert.IsTrue(output.Name == "Virtual POS");
             Assert.IsFalse(String.IsNullOrEmpty(output.DisplayName));
             Assert.IsTrue(output.DisplayName == "Virtual POS");
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 9);
         }
 
         [TestMethod]
         public async Task TestGetInterface_Async()
         {
             MainInterface output = await TestConnection.TestGetMainInterface_Async();
-
             Assert.IsNotNull(output);
             Assert.IsNotNull(output.Versions);
             Assert.IsTrue(output.Versions.Count == 1);
             Assert.IsTrue(output.Versions[0].MinorVersion == 1);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
         }
 
         [TestMethod]
@@ -41,6 +44,9 @@ namespace OmnivoreClassLibraryTests
             List<Location> output = await TestConnection.TestGetLocationsCollection_Async();
             Assert.IsNotNull(output);
             Assert.IsTrue(output.Count > 0);
+            Assert.IsNotNull(output[0]);
+            Assert.IsNotNull(output[0].Links);
+            Assert.IsTrue(output[0].Links.Count == 9);
         }
 
         [TestMethod]
@@ -57,9 +63,10 @@ namespace OmnivoreClassLibraryTests
         {
             Menu output = await TestConnection.TestGetMenuWithCategoriesAndItems_Async();
             Assert.IsNotNull(output);
-            Assert.IsNotNull(output.Links);
             Assert.IsNotNull(output.Categories);
             Assert.IsTrue(output.Categories.Count == 3);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
         }
 
         [TestMethod]
@@ -68,6 +75,17 @@ namespace OmnivoreClassLibraryTests
             List<ModifierGroup> output = await TestConnection.TestGetMenuItemModifiers_Async();
             Assert.IsNotNull(output);
             Assert.IsTrue(output.Count == 2);
+            Assert.IsNotNull(output[0].Links);
+            Assert.IsTrue(output[0].Links.Count == 2);
+        }
+
+        [TestMethod]
+        public async Task TestGetTableCollection_Async()
+        {
+            TableCollection output = await TestConnection.TestGetTableCollection_Async();
+            Assert.IsNotNull(output);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
         }
     }
 }

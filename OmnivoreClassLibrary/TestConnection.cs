@@ -39,9 +39,6 @@ namespace OmnivoreClassLibrary
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
                         output = mainInter.ToObject<MainInterface>(serializer);
-
-                        // load links
-                        output.Links = LoadLinks(mainInter);
                     }
                 }
             }
@@ -110,43 +107,11 @@ namespace OmnivoreClassLibrary
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
                         output = loc.ToObject<Location>(serializer);
-
-                        // load links
-                        output.Links = LoadLinks(loc);
                     }
                 }
                 else
                 {
                     // TODO: deal with other codes here
-                }
-            }
-
-            return output;
-        }
-
-        /// <summary>
-        /// Loads the links.
-        /// </summary>
-        /// <param name="jObj">The j object.</param>
-        /// <returns></returns>
-        private static List<Link> LoadLinks(JObject jObj)
-        {
-            List<Link> output = null;
-
-            if (jObj["_links"] != null)
-            {
-                JObject inner = jObj["_links"].Value<JObject>();
-
-                List<string> keys = inner.Properties().Select(p => p.Name).ToList();
-
-                output = new List<Link>();
-
-                foreach (string k in keys)
-                {
-                    Link l = inner[k].ToObject<Link>();
-                    l.Name = k;
-
-                    output.Add(l);
                 }
             }
 
@@ -179,9 +144,6 @@ namespace OmnivoreClassLibrary
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
                         output = menuTmp.ToObject<Menu>(serializer);
-
-                        // load links
-                        output.Links = LoadLinks(menuTmp);
                     }
                 }
             }
@@ -216,9 +178,6 @@ namespace OmnivoreClassLibrary
 
                         output = menuTmp.ToObject<Menu>(serializer);
 
-                        // load links
-                        output.Links = LoadLinks(menuTmp);
-
                         // load embedded categories and items
                         Category categoryTmp;
                         MenuItem menuItemTmp;
@@ -234,7 +193,6 @@ namespace OmnivoreClassLibrary
 
                             categoryTmp = category.ToObject<Category>(serializer);
                             JObject tmpCatObj = JObject.Parse(category.ToString()); // need to convert JToken to JObject here, would like to improve this
-                            categoryTmp.Links = LoadLinks(tmpCatObj);
 
                             // add items for this category -- TODO: make recursive method if possible, to avoid this
                             JToken catToken = tmpCatObj["_embedded"];
@@ -249,7 +207,6 @@ namespace OmnivoreClassLibrary
 
                                 menuItemTmp = item.ToObject<MenuItem>(serializer);
                                 JObject tmpItemObj = JObject.Parse(item.ToString()); // need to convert JToken to JObject here, would like to improve this
-                                menuItemTmp.Links = LoadLinks(tmpItemObj);
 
                                 // add to collection
                                 categoryTmp.MenuItems.Add(menuItemTmp);
@@ -292,9 +249,6 @@ namespace OmnivoreClassLibrary
 
                         ModifierGroupCollection mgc = modGrpCollectionTmp.ToObject<ModifierGroupCollection>(serializer);
 
-                        // load links
-                        mgc.Links = LoadLinks(modGrpCollectionTmp);
-
                         // load embedded modifier groups and modifiers
                         // TODO: do a much better job parsing this so it isn't so manual
                         ModifierGroup modGrpTmp;
@@ -311,7 +265,6 @@ namespace OmnivoreClassLibrary
 
                             modGrpTmp = modGrp.ToObject<ModifierGroup>(serializer);
                             JObject tmpModGrpObj = JObject.Parse(modGrp.ToString()); // need to convert JToken to JObject here, would like to improve this
-                            modGrpTmp.Links = LoadLinks(tmpModGrpObj);
 
                             // add items for this category -- TODO: make recursive method if possible, to avoid this
                             JToken modGrpToken = tmpModGrpObj["_embedded"];
@@ -326,7 +279,6 @@ namespace OmnivoreClassLibrary
 
                                 modifierTmp = mod.ToObject<Modifier>(serializer);
                                 JObject tmpItemObj = JObject.Parse(mod.ToString()); // need to convert JToken to JObject here, would like to improve this
-                                modifierTmp.Links = LoadLinks(tmpItemObj);
 
                                 // add to collection
                                 modGrpTmp.Modifiers.Add(modifierTmp);
@@ -335,6 +287,38 @@ namespace OmnivoreClassLibrary
                             // add to collection
                             output.Add(modGrpTmp);
                         }
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<TableCollection> TestGetTableCollection_Async() // root https://api.omnivore.io/0.1/locations/zGibgKT9/tables
+        {
+            TableCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/tables"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject loc = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = loc.ToObject<TableCollection>(serializer);
                     }
                 }
             }

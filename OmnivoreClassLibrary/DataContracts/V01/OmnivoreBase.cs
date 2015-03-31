@@ -12,6 +12,7 @@ namespace OmnivoreClassLibrary.DataContracts.V01
 {
     public abstract class OmnivoreBase 
     {
-        public List<Link> Links { get; set; }
+        [JsonProperty("_links")]
+        public Dictionary<string, Link> Links { get; set; }
     }
 }
