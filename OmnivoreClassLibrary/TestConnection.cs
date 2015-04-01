@@ -243,5 +243,101 @@ namespace OmnivoreClassLibrary
 
             return output;
         }
+
+        public static async Task<RevenueCenterCollection> TestGetRevenueCenterCollection_Async() // root https://api.omnivore.io/0.1/locations/zGibgKT9/revenue_centers
+        {
+            RevenueCenterCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/revenue_centers"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject loc = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = loc.ToObject<RevenueCenterCollection>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<OrderTypeCollection> TestGetOrderTypeCollection_Async() // root https://api.omnivore.io/0.1/locations/zGibgKT9/revenue_centers
+        {
+            OrderTypeCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/order_types"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject loc = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = loc.ToObject<OrderTypeCollection>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<EmployeeCollection> TestGetEmployeeCollection_Async() // root https://api.omnivore.io/0.1/locations/zGibgKT9/revenue_centers
+        {
+            EmployeeCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/employees"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject loc = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = loc.ToObject<EmployeeCollection>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
     }
 }

@@ -47,9 +47,14 @@
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
     <Compile Include="DataContracts\V01\Address.cs" />
+    <Compile Include="DataContracts\V01\AppliesTo.cs" />
     <Compile Include="DataContracts\V01\Category.cs" />
     <Compile Include="DataContracts\V01\CategoryCollection.cs" />
+    <Compile Include="DataContracts\V01\Discount.cs" />
+    <Compile Include="DataContracts\V01\Employee.cs" />
+    <Compile Include="DataContracts\V01\EmployeeCollection.cs" />
     <Compile Include="DataContracts\V01\Enums\ApiVersionStatus.cs" />
+    <Compile Include="DataContracts\V01\Enums\DiscountType.cs" />
     <Compile Include="DataContracts\V01\Enums\LocationStatus.cs" />
     <Compile Include="DataContracts\V01\Enums\State.cs" />
     <Compile Include="DataContracts\V01\Item.cs" />
@@ -67,7 +72,11 @@
     <Compile Include="DataContracts\V01\ModifierGroupCollection.cs" />
     <Compile Include="DataContracts\V01\OmnivoreBase.cs" />
     <Compile Include="DataContracts\V01\OmnivoreCollectionBase.cs" />
+    <Compile Include="DataContracts\V01\OrderType.cs" />
+    <Compile Include="DataContracts\V01\OrderTypeCollection.cs" />
     <Compile Include="DataContracts\V01\PriceLevel.cs" />
+    <Compile Include="DataContracts\V01\RevenueCenter.cs" />
+    <Compile Include="DataContracts\V01\RevenueCenterCollection.cs" />
     <Compile Include="DataContracts\V01\Table.cs" />
     <Compile Include="DataContracts\V01\TableCollection.cs" />
     <Compile Include="DataContracts\V01\Ticket.cs" />

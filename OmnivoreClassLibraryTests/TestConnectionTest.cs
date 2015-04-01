@@ -47,8 +47,12 @@ namespace OmnivoreClassLibraryTests
             Assert.IsTrue(output.Count > 0);
             Assert.IsNotNull(output.Locations);
             Assert.IsTrue(output.Locations.Count == 1);
-            Location l = (Location)output.Locations.First().Value[0];
-            Assert.IsTrue(l.Links.Count == 9);
+            List<Location> locGroups = (List<Location>)output.Locations.First().Value;
+            Assert.IsNotNull(locGroups);
+            Assert.IsTrue(locGroups.Count == 1);
+            Location loc = locGroups.First();
+            Assert.IsTrue(loc.Links.Count == 9);
+            Assert.IsTrue(loc.Name == "Virtual POS");
         }
 
         [TestMethod]
@@ -70,7 +74,10 @@ namespace OmnivoreClassLibraryTests
             Assert.IsTrue(output.Links.Count == 1);
             Assert.IsNotNull(output.Categories);
             Assert.IsTrue(output.Categories.Count == 1);
-            Category c = (Category)output.Categories.First().Value[0];
+            List<Category> catGroups = (List<Category>)output.Categories.First().Value;
+            Assert.IsNotNull(catGroups);
+            Assert.IsTrue(catGroups.Count == 3);
+            Category c = catGroups.First();
             Assert.IsNotNull(c);
             Assert.IsTrue(c.Name == "Drinks");
             Assert.IsNotNull(c.Links);
@@ -83,7 +90,6 @@ namespace OmnivoreClassLibraryTests
             MenuItem mi = menuItems[0];
             Assert.IsNotNull(mi);
             Assert.IsTrue(mi.Name == "Orange Juice");
-
         }
 
         [TestMethod]
@@ -96,7 +102,10 @@ namespace OmnivoreClassLibraryTests
             Assert.IsTrue(output.Links.Count == 1);
             Assert.IsNotNull(output.ModifierGroups);
             Assert.IsTrue(output.ModifierGroups.Count == 1);
-            ModifierGroup mg = (ModifierGroup)output.ModifierGroups.First().Value[0];
+            List<ModifierGroup> modGroups = (List<ModifierGroup>)output.ModifierGroups.First().Value;
+            Assert.IsNotNull(modGroups);
+            Assert.IsTrue(modGroups.Count == 2);
+            ModifierGroup mg = modGroups.First();
             Assert.IsNotNull(mg);
             Assert.IsTrue(mg.Name == "Temperature");
             Assert.IsNotNull(mg.Links);
@@ -118,6 +127,86 @@ namespace OmnivoreClassLibraryTests
             Assert.IsNotNull(output);
             Assert.IsNotNull(output.Links);
             Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.Tables);
+            Assert.IsTrue(output.Tables.Count == 1);
+            List<Table> tables = (List<Table>)output.Tables.First().Value;
+            Assert.IsNotNull(tables);
+            Assert.IsTrue(tables.Count == 14);
+            Table tab = tables.First();
+            Assert.IsNotNull(tab);
+            Assert.IsTrue(tab.Name == "1");
+            Assert.IsTrue(tab.Number == 1);
+            Assert.IsTrue(tab.Seats == 4);
+        }
+
+        [TestMethod]
+        public async Task TestGetRevenueCenterCollection_Async()
+        {
+            RevenueCenterCollection output = await TestConnection.TestGetRevenueCenterCollection_Async();
+            Assert.IsNotNull(output);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.RevenueCenters);
+            Assert.IsTrue(output.RevenueCenters.Count == 1);
+            RevenueCenter rc = (RevenueCenter)output.RevenueCenters.First().Value[0];
+            Assert.IsNotNull(rc);
+            Assert.IsTrue(rc.Name == "Dining");
+            Assert.IsTrue(rc.Id == "LdiqGibo");
+            Assert.IsNotNull(rc.EmbeddedTablesAndTickets);
+            Assert.IsNotNull(rc.EmbeddedTablesAndTickets.open_tickets);
+            Assert.IsTrue(rc.EmbeddedTablesAndTickets.open_tickets.Count == 1);
+            Ticket t = rc.EmbeddedTablesAndTickets.open_tickets[0];
+            Assert.IsNotNull(t);
+            Assert.IsNotNull(t.Links);
+            Assert.IsTrue(t.Links.Count == 6);
+            Assert.IsTrue(t.Name == "Your First Ticket!");
+            Assert.IsNotNull(t.Totals);
+            Assert.IsTrue(t.Totals.Due == (decimal)10.09);
+            Assert.IsNotNull(rc.EmbeddedTablesAndTickets.tables);
+            Assert.IsTrue(rc.EmbeddedTablesAndTickets.tables.Count == 10);
+            Table tab = rc.EmbeddedTablesAndTickets.tables[0];
+            Assert.IsNotNull(tab);
+            Assert.IsNotNull(tab.Links);
+            Assert.IsTrue(tab.Links.Count == 1);
+            Assert.IsTrue(tab.Name == "1");
+            Assert.IsTrue(tab.Number == 1);
+            Assert.IsTrue(tab.Seats == 4);
+        }
+
+        [TestMethod]
+        public async Task TestGetOrderTypeCollection_Async()
+        {
+            OrderTypeCollection output = await TestConnection.TestGetOrderTypeCollection_Async();
+            Assert.IsNotNull(output);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.OrderTypes);
+            Assert.IsTrue(output.OrderTypes.Count == 1);
+            List<OrderType> orderTypes = (List<OrderType>)output.OrderTypes.First().Value;
+            Assert.IsNotNull(orderTypes);
+            Assert.IsTrue(orderTypes.Count == 2);
+            OrderType ot = orderTypes.First();
+            Assert.IsNotNull(ot);
+            Assert.IsTrue(ot.Name == "Eat In");
+            Assert.IsTrue(ot.Id == "KxiAaip5");
+        }
+
+        [TestMethod]
+        public async Task TestGetEmployeeCollection_Async()
+        {
+            EmployeeCollection output = await TestConnection.TestGetEmployeeCollection_Async();
+            Assert.IsNotNull(output);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.Employees);
+            Assert.IsTrue(output.Employees.Count == 1);
+            List<Employee> emps = (List<Employee>)output.Employees.First().Value;
+            Assert.IsNotNull(emps);
+            Assert.IsTrue(emps.Count == 5);
+            Employee emp = emps.First();
+            Assert.IsNotNull(emp);
+            Assert.IsTrue(emp.Id == "MjikgioG");
+            Assert.IsTrue(emp.LastName == "Belcher");
         }
     }
 }
