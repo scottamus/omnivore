@@ -179,9 +179,9 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
-        public static async Task<ModifierGroupCollection> TestGetMenuItemModifierGroupCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/rMTAbTjr/modifier_groups/
+        public static async Task<MenuItemModifierGroupCollection> TestGetMenuItemModifierGroupCollection_Async() //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/rMTAbTjr/modifier_groups/
         {
-            ModifierGroupCollection output = null;
+            MenuItemModifierGroupCollection output = null;
 
             using (HttpClient client = new HttpClient())
             {
@@ -204,7 +204,7 @@ namespace OmnivoreClassLibrary
                         JsonSerializer serializer = new JsonSerializer();
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
-                        output = menuTmp.ToObject<ModifierGroupCollection>(serializer);
+                        output = menuTmp.ToObject<MenuItemModifierGroupCollection>(serializer);
                     }
                 }
             }
@@ -333,6 +333,82 @@ namespace OmnivoreClassLibrary
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
                         output = loc.ToObject<EmployeeCollection>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<Ticket> TestGetTicket(string ticketId)
+        {
+            Ticket output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                HttpResponseMessage response = await client.GetAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/", "tickets", "/", ticketId));
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject loc = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = loc.ToObject<Ticket>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<Ticket> TestOpenTicket_Basic(Ticket ticket)
+        {
+            Ticket output = null;
+
+            //// TODO: get location links and other domain data from POS system on startup or if not there, and cache
+            //Location loc = await TestGetLocation_Async();
+            //if (loc != null && loc.Links != null)
+            //{
+            //    KeyValuePair<string, Link> kvpEmps = loc.Links.Where(l => l.Key == "employees").FirstOrDefault();
+            //    Link employeesLink = kvpEmps.Value;
+            //}
+
+            TicketOpenItem ticketToCreate = new TicketOpenItem(ticket);
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                string apiVersion = AppSettings.API_Version;
+                string json = JsonConvert.SerializeObject(ticketToCreate);
+                StringContent stringContent = new StringContent(json);
+                HttpResponseMessage response = await client.PostAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/tickets"), stringContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject loc = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = loc.ToObject<Ticket>(serializer);
                     }
                 }
             }

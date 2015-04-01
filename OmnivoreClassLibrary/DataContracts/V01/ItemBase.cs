@@ -12,23 +12,6 @@ namespace OmnivoreClassLibrary.DataContracts.V01
 {
     public abstract class ItemBase : OmnivoreBase
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("in_stock")]
-        public bool InStock { get; set; }
-
-        [JsonProperty("modifier_groups_count")]
-        public int ModifierGroupsCount { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("price")]
-        [JsonConverter(typeof(CurrencyConverter))]
-        public decimal Price { get; set; }
-
-        [JsonProperty("price_levels")]
-        public List<PriceLevel> PriceLevels { get; set; }
+        
     }
 }

@@ -12,17 +12,15 @@ namespace OmnivoreClassLibrary.DataContracts.V01
 {
     public class Ticket : OmnivoreBase
     {
-        //public Embedded2 _embedded { get; set; }
-
         [JsonProperty("auto_send")]
         public bool AutoSend { get; set; }
 
         [JsonProperty("closed_at")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime ClosedAt { get; set; }
+        public DateTime? ClosedAt { get; set; }
 
         [JsonProperty("guest_count")]
-        public int GuestCount { get; set; }
+        public int? GuestCount { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -45,6 +43,20 @@ namespace OmnivoreClassLibrary.DataContracts.V01
 
         [JsonProperty("@void")]
         public bool Void { get; set; }
+
+        [JsonProperty("_embedded")]
+        public EmbeddedTicketItems EmbeddedTicketItems { get; set; }
     }
 
+    public class EmbeddedTicketItems
+    {
+        public List<Discount> discounts { get; set; }
+        public Employee employee { get; set; }
+        public List<TicketItem> items { get; set; }
+        public OrderType order_type { get; set; }
+        public List<Payment> payments { get; set; }
+        public RevenueCenter revenue_center { get; set; }
+        public Table table { get; set; }
+        public List<TicketItem> voided_items { get; set; }
+    }
 }

@@ -7,22 +7,24 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using OmnivoreClassLibrary.Helpers;
+using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class Modifier : OmnivoreBase
+    public class Payment
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("type")]
+        public PaymentType PaymentType { get; set; }
 
-        [JsonProperty("price_levels")]
-        public List<PriceLevel> PriceLevels { get; set; }
-
-        [JsonProperty("price_per_unit")]
+        [JsonProperty("amount")]
         [JsonConverter(typeof(CurrencyConverter))]
-        public decimal PricePerUnit { get; set; }
+        public decimal Amount { get; set; }
+
+        [JsonProperty("tip")]
+        [JsonConverter(typeof(CurrencyConverter))]
+        public decimal Tip { get; set; }
     }
 }

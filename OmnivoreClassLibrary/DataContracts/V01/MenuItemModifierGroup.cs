@@ -10,7 +10,7 @@ using OmnivoreClassLibrary.Helpers;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class ModifierGroup : OmnivoreBase
+    public class MenuItemModifierGroup : OmnivoreBase
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -28,6 +28,6 @@ namespace OmnivoreClassLibrary.DataContracts.V01
         public bool Required { get; set; }
 
         [JsonProperty("_embedded")]
-        public Dictionary<string, List<Modifier>> Modifiers { get; set; }
+        public Dictionary<string, List<MenuItemModifier>> Modifiers { get; set; }
     }
 }

@@ -95,27 +95,27 @@ namespace OmnivoreClassLibraryTests
         [TestMethod]
         public async Task TestGetMenuItemModifierGroupCollection_Async()
         {
-            ModifierGroupCollection output = await TestConnection.TestGetMenuItemModifierGroupCollection_Async();
+            MenuItemModifierGroupCollection output = await TestConnection.TestGetMenuItemModifierGroupCollection_Async();
             Assert.IsNotNull(output);
             Assert.IsTrue(output.Count == 2);
             Assert.IsNotNull(output.Links);
             Assert.IsTrue(output.Links.Count == 1);
             Assert.IsNotNull(output.ModifierGroups);
             Assert.IsTrue(output.ModifierGroups.Count == 1);
-            List<ModifierGroup> modGroups = (List<ModifierGroup>)output.ModifierGroups.First().Value;
+            List<MenuItemModifierGroup> modGroups = (List<MenuItemModifierGroup>)output.ModifierGroups.First().Value;
             Assert.IsNotNull(modGroups);
             Assert.IsTrue(modGroups.Count == 2);
-            ModifierGroup mg = modGroups.First();
+            MenuItemModifierGroup mg = modGroups.First();
             Assert.IsNotNull(mg);
             Assert.IsTrue(mg.Name == "Temperature");
             Assert.IsNotNull(mg.Links);
             Assert.IsTrue(mg.Links.Count == 2);
             Assert.IsNotNull(mg.Modifiers);
             Assert.IsTrue(mg.Modifiers.Count == 1);
-            List<Modifier> mods = (List<Modifier>)mg.Modifiers.First().Value;
+            List<MenuItemModifier> mods = (List<MenuItemModifier>)mg.Modifiers.First().Value;
             Assert.IsNotNull(mods);
             Assert.IsTrue(mods.Count == 5);
-            Modifier m = mods[0];
+            MenuItemModifier m = mods[0];
             Assert.IsNotNull(m);
             Assert.IsTrue(m.Name == "Perfect");
         }
@@ -134,12 +134,14 @@ namespace OmnivoreClassLibraryTests
             Assert.IsTrue(tables.Count == 14);
             Table tab = tables.First();
             Assert.IsNotNull(tab);
+            Assert.IsTrue(tab.Id == "jLiyniEb");
             Assert.IsTrue(tab.Name == "1");
             Assert.IsTrue(tab.Number == 1);
             Assert.IsTrue(tab.Seats == 4);
         }
 
         [TestMethod]
+        [Ignore] // only run on a fresh, reset POS!!
         public async Task TestGetRevenueCenterCollection_Async()
         {
             RevenueCenterCollection output = await TestConnection.TestGetRevenueCenterCollection_Async();
@@ -162,6 +164,42 @@ namespace OmnivoreClassLibraryTests
             Assert.IsTrue(t.Name == "Your First Ticket!");
             Assert.IsNotNull(t.Totals);
             Assert.IsTrue(t.Totals.Due == (decimal)10.09);
+            Assert.IsNotNull(t.EmbeddedTicketItems);
+            Assert.IsNotNull(t.EmbeddedTicketItems.employee);
+            Assert.IsTrue(t.EmbeddedTicketItems.employee.Id == "MjikgioG");
+            Assert.IsNotNull(t.EmbeddedTicketItems.items);
+            Assert.IsTrue(t.EmbeddedTicketItems.items.Count == 2);
+            TicketItem ti = t.EmbeddedTicketItems.items.Find(c => c.Id == "4Tx5xgij"); // new baconings
+            Assert.IsNotNull(ti);
+            Assert.IsTrue(ti.Name == "New Bacon-ings");
+            Assert.IsNotNull(ti.EmbeddedTicketItemSubclasses);
+            Assert.IsNotNull(ti.EmbeddedTicketItemSubclasses.menu_item);
+            MenuItem mi = ti.EmbeddedTicketItemSubclasses.menu_item;
+            Assert.IsTrue(mi.Id == "rMTAbTjr");
+            Assert.IsNotNull(ti.EmbeddedTicketItemSubclasses.modifiers);
+            Assert.IsTrue(ti.EmbeddedTicketItemSubclasses.modifiers.Count == 2);
+            TicketItemModifier tim = ti.EmbeddedTicketItemSubclasses.modifiers.Find(c => c.Id == "dEcgdyiG"); // tomato
+            Assert.IsNotNull(tim);
+            Assert.IsTrue(tim.Name == "Tomato");
+            Assert.IsNotNull(tim.EmbeddedMenuItemModifier);
+            Assert.IsNotNull(tim.EmbeddedMenuItemModifier.menu_modifier);
+            MenuItemModifier mim = tim.EmbeddedMenuItemModifier.menu_modifier;
+            Assert.IsNotNull(mim);
+            Assert.IsTrue(mim.Id == "E5cpac84");
+            Assert.IsNotNull(mim.PriceLevels);
+            Assert.IsTrue(mim.PriceLevels.Count == 1);
+            PriceLevel pl = mim.PriceLevels[0];
+            Assert.IsNotNull(pl);
+            Assert.IsTrue(pl.Id == "Rzi98iRR");
+            Assert.IsNotNull(t.EmbeddedTicketItems.order_type);
+            OrderType ot = t.EmbeddedTicketItems.order_type;
+            Assert.IsTrue(ot.Id == "KxiAaip5");
+            Assert.IsNotNull(t.EmbeddedTicketItems.revenue_center);
+            RevenueCenter revCenter = t.EmbeddedTicketItems.revenue_center;
+            Assert.IsTrue(revCenter.Id == "LdiqGibo");
+            Assert.IsNotNull(t.EmbeddedTicketItems.table);
+            Table ticketTable = t.EmbeddedTicketItems.table;
+            Assert.IsTrue(ticketTable.Id == "jLiyniEb");
             Assert.IsNotNull(rc.EmbeddedTablesAndTickets.tables);
             Assert.IsTrue(rc.EmbeddedTablesAndTickets.tables.Count == 10);
             Table tab = rc.EmbeddedTablesAndTickets.tables[0];
@@ -207,6 +245,36 @@ namespace OmnivoreClassLibraryTests
             Assert.IsNotNull(emp);
             Assert.IsTrue(emp.Id == "MjikgioG");
             Assert.IsTrue(emp.LastName == "Belcher");
+        }
+
+        [TestMethod]
+        [Ignore] // don't want to open a new ticket every time I run all tests!
+        public async Task TestOpenTicket_Basic()
+        {
+            // arrange - TODO: get from POS system, not hardcoded!
+            Ticket ticketToCreate = new Ticket();
+            ticketToCreate.EmbeddedTicketItems = new EmbeddedTicketItems();
+            ticketToCreate.EmbeddedTicketItems.employee = new Employee() { Id = "BdTaKT4X" };
+            ticketToCreate.EmbeddedTicketItems.order_type = new OrderType() { Id = "KxiAaip5" };
+            ticketToCreate.EmbeddedTicketItems.revenue_center = new RevenueCenter() { Id = "LdiqGibo" };
+            ticketToCreate.EmbeddedTicketItems.table = new Table() { Id = "x4TdoTd8" };
+            ticketToCreate.GuestCount = 2;
+            ticketToCreate.Name = "Scott's First Ticket!";
+            ticketToCreate.AutoSend = true;
+
+            // act
+            Ticket output = await TestConnection.TestOpenTicket_Basic(ticketToCreate);
+
+            // assert
+            Assert.IsNotNull(output);
+        }
+
+        [TestMethod]
+        public async Task TestGetTicketIOpened()
+        {
+            Ticket output = await TestConnection.TestGetTicket("qTRXjxio");
+            Assert.IsNotNull(output);
+            Assert.IsTrue(output.Name == "Scott's First Ticket!");
         }
     }
 }
