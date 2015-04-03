@@ -7,7 +7,7 @@ using OmnivoreClassLibrary.DataContracts.V01.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
-using OmnivoreClassLibrary.Helpers;
+using OmnivoreClassLibrary.JSONConverters;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {

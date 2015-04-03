@@ -7,11 +7,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using OmnivoreClassLibrary.JSONConverters;
+using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public abstract class ItemBase : OmnivoreBase
+    public class TenderType : OmnivoreBase
     {
-        
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("name")]
+        public TenderTypeEnum TenderTypeEnum { get; set; }
     }
 }

@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="DataAccess\OmnivoreDataManager.cs" />
+    <Compile Include="DataAccess\OmnivoreRepository.cs" />
     <Compile Include="DataContracts\V01\Address.cs" />
     <Compile Include="DataContracts\V01\AppliesTo.cs" />
     <Compile Include="DataContracts\V01\Category.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="DataContracts\V01\Enums\LocationStatus.cs" />
     <Compile Include="DataContracts\V01\Enums\PaymentType.cs" />
     <Compile Include="DataContracts\V01\Enums\State.cs" />
+    <Compile Include="DataContracts\V01\Enums\TenderTypeEnum.cs" />
     <Compile Include="DataContracts\V01\ItemBase.cs" />
     <Compile Include="DataContracts\V01\Link.cs" />
     <Compile Include="DataContracts\V01\LinkDetail.cs" />
@@ -68,26 +71,35 @@
     <Compile Include="DataContracts\V01\MenuItem.cs" />
     <Compile Include="DataContracts\V01\MenuItemCollection.cs" />
     <Compile Include="DataContracts\V01\MenuItemModifier.cs" />
+    <Compile Include="DataContracts\V01\MenuItemModifierAddDTO.cs" />
     <Compile Include="DataContracts\V01\MenuItemModifierGroup.cs" />
     <Compile Include="DataContracts\V01\MenuItemModifierGroupCollection.cs" />
+    <Compile Include="DataContracts\V01\ModifierBase.cs" />
     <Compile Include="DataContracts\V01\OmnivoreBase.cs" />
+    <Compile Include="DataContracts\V01\OmnivoreCollection.cs" />
     <Compile Include="DataContracts\V01\OmnivoreCollectionBase.cs" />
     <Compile Include="DataContracts\V01\OrderType.cs" />
     <Compile Include="DataContracts\V01\OrderTypeCollection.cs" />
-    <Compile Include="DataContracts\V01\Payment.cs" />
+    <Compile Include="DataContracts\V01\PaymentDTO.cs" />
+    <Compile Include="DataContracts\V01\PaymentBaseDTO.cs" />
+    <Compile Include="DataContracts\V01\PaymentStatus.cs" />
     <Compile Include="DataContracts\V01\PriceLevel.cs" />
     <Compile Include="DataContracts\V01\RevenueCenter.cs" />
     <Compile Include="DataContracts\V01\RevenueCenterCollection.cs" />
     <Compile Include="DataContracts\V01\Table.cs" />
     <Compile Include="DataContracts\V01\TableCollection.cs" />
+    <Compile Include="DataContracts\V01\TenderType.cs" />
+    <Compile Include="DataContracts\V01\PaymentThirdPartyDTO.cs" />
     <Compile Include="DataContracts\V01\Ticket.cs" />
     <Compile Include="DataContracts\V01\TicketItem.cs" />
     <Compile Include="DataContracts\V01\TicketItemModifier.cs" />
-    <Compile Include="DataContracts\V01\TicketOpenItem.cs" />
+    <Compile Include="DataContracts\V01\TicketItemOpenDTO.cs" />
+    <Compile Include="DataContracts\V01\TicketOpenDTO.cs" />
     <Compile Include="DataContracts\V01\Totals.cs" />
     <Compile Include="DataContracts\V01\Version.cs" />
-    <Compile Include="Helpers\CurrencyConverter.cs" />
-    <Compile Include="Helpers\UnixDateTimeConverter.cs" />
+    <Compile Include="JSONConverters\CurrencyConverter.cs" />
+    <Compile Include="JSONConverters\UnixDateTimeConverter.cs" />
+    <Compile Include="Interfaces\IOmnivoreRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestConnection.cs" />
   </ItemGroup>
@@ -96,8 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessDomain\" />
-    <Folder Include="DataAccess\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,13 +10,22 @@ using OmnivoreClassLibrary.JSONConverters;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class PriceLevel
+    public class ModifierBase : OmnivoreBase
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("price")]
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("quantity")]
+        public int? Quantity { get; set; }
+
+        [JsonProperty("comment")]
+        public string Comment { get; set; }
+
+        [JsonProperty("price_per_unit")]
         [JsonConverter(typeof(CurrencyConverter))]
-        public decimal Price { get; set; }
+        public decimal PricePerUnit { get; set; }
     }
 }

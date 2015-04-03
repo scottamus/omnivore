@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
-using OmnivoreClassLibrary.Helpers;
+using OmnivoreClassLibrary.JSONConverters;
 using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
 namespace OmnivoreClassLibrary.DataContracts.V01

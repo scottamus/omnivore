@@ -248,6 +248,24 @@ namespace OmnivoreClassLibraryTests
         }
 
         [TestMethod]
+        public async Task TestGetTenderTypeCollection_Async()
+        {
+            OmnivoreCollection<TenderType> output = await TestConnection.TestGetTenderTypeCollection_Async("https://api.omnivore.io/0.1/locations/zGibgKT9/tender_types/");
+            Assert.IsNotNull(output);
+            Assert.IsNotNull(output.Links);
+            Assert.IsTrue(output.Links.Count == 1);
+            Assert.IsNotNull(output.Items);
+            Assert.IsTrue(output.Items.Count == 1);
+            List<TenderType> tenderTypes = (List<TenderType>)output.Items.First().Value;
+            Assert.IsNotNull(tenderTypes);
+            Assert.IsTrue(tenderTypes.Count == 2);
+            TenderType tt = tenderTypes.First();
+            Assert.IsNotNull(tt);
+            Assert.IsTrue(tt.Id == "qBi4Bik7");
+            Assert.IsTrue(tt.TenderTypeEnum == TenderTypeEnum.Visa);
+        }
+
+        [TestMethod]
         [Ignore] // don't want to open a new ticket every time I run all tests!
         public async Task TestOpenTicket_Basic()
         {
@@ -259,7 +277,7 @@ namespace OmnivoreClassLibraryTests
             ticketToCreate.EmbeddedTicketItems.revenue_center = new RevenueCenter() { Id = "LdiqGibo" };
             ticketToCreate.EmbeddedTicketItems.table = new Table() { Id = "x4TdoTd8" };
             ticketToCreate.GuestCount = 2;
-            ticketToCreate.Name = "Scott's First Ticket!";
+            ticketToCreate.Name = "Scott's Fifth Ticket!";
             ticketToCreate.AutoSend = true;
 
             // act
@@ -270,11 +288,182 @@ namespace OmnivoreClassLibraryTests
         }
 
         [TestMethod]
+        [Ignore]
         public async Task TestGetTicketIOpened()
         {
-            Ticket output = await TestConnection.TestGetTicket("qTRXjxio");
+            Ticket output = await TestConnection.TestGetTicket("Gc6bK8Tz");
             Assert.IsNotNull(output);
-            Assert.IsTrue(output.Name == "Scott's First Ticket!");
+            Assert.IsTrue(output.Name == "Scott's Second Ticket!");
         }
+
+        [TestMethod]
+        [Ignore]
+        public async Task TestAddItemsToTicket()
+        {
+            string ticketId = "ycjRX4Tz";
+
+            // let's get some menu items
+            CategoryCollection categoryCollection = await TestConnection.TestGetMenuCategoriesAndItems_Async();
+
+            // let's get our ticket that we opened
+            Ticket output = await TestConnection.TestGetTicket(ticketId);
+
+            // now let's add a couple of menu items, with modifiers, to our ticket
+            // Note that the assumption is that another feature would get the list of menu items,
+            // and there would be some selection of menu items from there, and they would then pass
+            // in the selected menu items...so this selection is a little contrived since I'm not
+            // building the client app.  I can provide methods to get the menu items, and to 
+            // allow passing in selected menu items to add them to a ticket, but the actual selection
+            // is something the client app would need to perform.
+            if (categoryCollection != null)
+            {
+                // let's bypass the proper checks for now since I'm just testing for now
+                List<Category> categories = categoryCollection.Categories.First().Value;
+
+                MenuItem drink = null;
+                MenuItem burger = null;
+
+                // let's get a drink first
+                Category drinkCat = categories.Find(c => c.Name == "Drinks");
+
+
+                if (drinkCat != null)
+                {
+                    // I'll just grab the first thing because I'm thirsty - again bypassing proper coding techniques because 
+                    // I just want to get the menu item, and I don't have my proper client-facing .NET objects yet, etc.
+                    // I'm just testing the add item functionality here, so I can refine it later.
+                    drink = drinkCat.MenuItems.First().Value.First();
+
+                    // if there are modifier groups for this item, I'll grab them... need to methodize this
+                    if (drink.ModifierGroupsCount > 0)
+                    {
+                        // I know there are none for this one, so punting for now.
+                    }
+                }
+
+                // let's order a burger
+                Category burgerCat = categories.Find(c => c.Name == "Burgers");
+
+                if (burgerCat != null)
+                {
+                    burger = burgerCat.MenuItems.First().Value.Find(b => b.Name == "New Bacon-ings");
+
+                    // if there are modifier groups for this item, I'll grab them
+                    // TODO: methodize this
+                    if (burger.ModifierGroupsCount > 0)
+                    {
+                        Link burgerModsLink = burger.Links.Where(l => l.Key == "modifier_groups").First().Value;
+                        MenuItemModifierGroupCollection modifierCollection = await TestConnection.TestGetMenuItemModifierGroupCollection_Async(burgerModsLink.URL);
+                        List<MenuItemModifierGroup> modGroups = modifierCollection.ModifierGroups.First().Value;// sheesh...see why I need to clean this up in the object model??  I'd need a ton of null checks in here also if I wasn't in test (quick and dirty mode)
+                        MenuItemModifierGroup temperatureGroup = modGroups.Find(mg => mg.Name == "Temperature");
+                        MenuItemModifier temperatureMod = temperatureGroup.Modifiers.First().Value.Find(m => m.Name == "Perfect");
+                        temperatureMod.Comment = "just the right amount of pink";
+                        MenuItemModifierGroup toppings = modGroups.Find(mg => mg.Name == "Toppings");
+                        MenuItemModifier toppingMod = toppings.Modifiers.First().Value.Find(m => m.Name == "Cheese");
+                        toppingMod.Quantity = 2;
+                        toppingMod.Comment = "extra cheese!";
+
+                        if (burger.Modifiers == null)
+                        {
+                            burger.Modifiers = new List<MenuItemModifier>();
+                        }
+                        burger.Modifiers.Add(temperatureMod);
+                        burger.Modifiers.Add(toppingMod);
+                    }
+                }
+
+                // I've selected what I want - now let's add it to the ticket!
+                TicketItem drinkTicketItem = new TicketItem();
+                drinkTicketItem.EmbeddedTicketItemSubclasses = new EmbeddedTicketItemSubclasses();
+                drinkTicketItem.Comment = "ticket item comment for my soda";
+                drinkTicketItem.Quantity = 2; // just so I make sure it doesn't default
+                drinkTicketItem.EmbeddedTicketItemSubclasses.menu_item = drink;
+
+                TicketItem burgerTicketItem = new TicketItem();
+                burgerTicketItem.EmbeddedTicketItemSubclasses = new EmbeddedTicketItemSubclasses();
+                burgerTicketItem.Comment = "ticket item comment for my burger";
+                burgerTicketItem.Quantity = 2; // just so I make sure it doesn't default
+                burgerTicketItem.EmbeddedTicketItemSubclasses.menu_item = burger;
+
+                List<TicketItem> ticketItemsToAdd = new List<TicketItem>(); // fix somehow
+                ticketItemsToAdd.Add(drinkTicketItem);
+                ticketItemsToAdd.Add(burgerTicketItem);
+
+                Ticket t = await TestConnection.AddTicketItems(ticketId, ticketItemsToAdd);
+
+                // test the output to see if the items were added.
+                Assert.IsNotNull(t);
+            }
+        }
+
+        [TestMethod]
+        [Ignore]
+        public async Task TestMakeCardPresentPayment()
+        {
+            PaymentDTO payment = new PaymentDTO();
+            payment.Amount = (decimal)14.02;
+            payment.CardInfo = new Dictionary<string, object>();
+            payment.CardInfo.Add("data", "%B4111111111111111^SCHMOE                /JOE^161210100695000000?");
+            payment.PaymentType = "card_present";
+            payment.Tip = (decimal)3.50;
+
+            PaymentStatus paymentStatus = await TestConnection.MakePayment("Gc6bK8Tz", payment);
+            // test the output to see if the items were added.
+            Assert.IsNotNull(paymentStatus);
+        }
+
+        [TestMethod]
+        [Ignore]
+        public async Task TestMakeCardNotPresentPayment()
+        {
+            PaymentDTO payment = new PaymentDTO();
+            payment.Amount = (decimal)18.03;
+            payment.CardInfo = new Dictionary<string, object>();
+            payment.CardInfo.Add("number", "4111111111111111");
+            payment.CardInfo.Add("exp_month", 10); // int
+            payment.CardInfo.Add("exp_year", 2016); // int
+            payment.CardInfo.Add("cvc2", 123); // int
+            payment.PaymentType = "card_not_present";
+            payment.Tip = (decimal)3.50;
+
+            PaymentStatus paymentStatus = await TestConnection.MakePayment("xiAqgacA", payment);
+            // test the output to see if the items were added.
+            Assert.IsNotNull(paymentStatus);
+        }
+
+        [TestMethod]
+        [Ignore]
+        public async Task TestMakeGiftCardPayment()
+        {
+            PaymentDTO payment = new PaymentDTO();
+            payment.Amount = (decimal)18.03;
+            payment.CardInfo = new Dictionary<string, object>();
+            payment.CardInfo.Add("number", "4111111111111111");
+            payment.PaymentType = "gift_card";
+            payment.Tip = (decimal)3.50;
+
+            PaymentStatus paymentStatus = await TestConnection.MakePayment("9T89KXid", payment);
+            // test the output to see if the items were added.
+            Assert.IsNotNull(paymentStatus);
+        }
+
+        //[TestMethod]
+        //[Ignore]
+        //public async Task TestMakeThirdPartyPayment()
+        //{
+        //    //TenderTypeCollection tenderTypes = await TestConnection.TestGetTenderTypeCollection_Async();
+        //    //TenderType tenderType = tenderTypes.TenderTypes.First().Value.First();
+
+        //    //PaymentThirdPartyDTO payment = new PaymentThirdPartyDTO();
+        //    //payment.Amount = (decimal)18.03;
+        //    //payment.PaymentType = "3rd_party";
+        //    //payment.Tip = (decimal)3.50;
+        //    //payment.PaymentSource = "external transaction 111";
+        //    //payment.TenderType = Convert.ToString(tenderType.Id);
+
+        //    //PaymentStatus paymentStatus = await TestConnection.MakePaymentThirdParty("ycjRX4Tz", payment);
+        //    //// test the output to see if the items were added.
+        //    //Assert.IsNotNull(paymentStatus);
+        //}
     }
 }

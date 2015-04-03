@@ -10,8 +10,9 @@ using OmnivoreClassLibrary.JSONConverters;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public abstract class ItemBase : OmnivoreBase
+    public class OmnivoreCollection<T> : OmnivoreCollectionBase
     {
-        
+        [JsonProperty("_embedded")]
+        public Dictionary<string, List<T>> Items { get; set; }
     }
 }

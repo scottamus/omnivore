@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace OmnivoreClassLibrary.Helpers
+namespace OmnivoreClassLibrary.JSONConverters
 {
     /// <summary>
     /// Class to convert Unix date times to .NET datetimes.

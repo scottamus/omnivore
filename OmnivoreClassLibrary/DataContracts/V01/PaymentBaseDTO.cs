@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
-using OmnivoreClassLibrary.Helpers;
+using OmnivoreClassLibrary.JSONConverters;
 using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class Payment
+    public abstract class PaymentBaseDTO
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
         [JsonProperty("type")]
-        public PaymentType PaymentType { get; set; }
+        public string PaymentType { get; set; }
 
         [JsonProperty("amount")]
         [JsonConverter(typeof(CurrencyConverter))]

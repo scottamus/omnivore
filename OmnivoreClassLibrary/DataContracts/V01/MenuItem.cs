@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
-using OmnivoreClassLibrary.Helpers;
+using OmnivoreClassLibrary.JSONConverters;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
@@ -30,5 +30,9 @@ namespace OmnivoreClassLibrary.DataContracts.V01
 
         [JsonProperty("price_levels")]
         public List<PriceLevel> PriceLevels { get; set; }
+
+        // todo: add to client objects, but remove from json objects
+        [JsonIgnore]
+        public List<MenuItemModifier> Modifiers { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using OmnivoreClassLibrary.DataContracts.V01;
 using OmnivoreClassLibrary.DataContracts.V01.Enums;
+using OmnivoreClassLibrary.DataAccess;
 
 namespace OmnivoreClassLibrary
 {
@@ -212,6 +213,37 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
+        public static async Task<MenuItemModifierGroupCollection> TestGetMenuItemModifierGroupCollection_Async(string url) //https://api.omnivore.io/0.1/locations/zGibgKT9/menu/items/rMTAbTjr/modifier_groups/
+        {
+            MenuItemModifierGroupCollection output = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                //client.BaseAddress = new Uri("https://api.omnivore.io/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                HttpResponseMessage response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+
+                    if (!String.IsNullOrEmpty(jsonString))
+                    {
+                        JObject menuTmp = JObject.Parse(jsonString);
+
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                        output = menuTmp.ToObject<MenuItemModifierGroupCollection>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
+
         public static async Task<TableCollection> TestGetTableCollection_Async() // root https://api.omnivore.io/0.1/locations/zGibgKT9/tables
         {
             TableCollection output = null;
@@ -340,6 +372,14 @@ namespace OmnivoreClassLibrary
             return output;
         }
 
+        public static async Task<OmnivoreCollection<TenderType>> TestGetTenderTypeCollection_Async(string url)
+        {
+            OmnivoreDataManager mgr = new OmnivoreDataManager();
+            OmnivoreCollection<TenderType> output = await mgr.GetOmnivoreCollection<OmnivoreCollection<TenderType>>(url);
+
+            return output;
+        }
+
         public static async Task<Ticket> TestGetTicket(string ticketId)
         {
             Ticket output = null;
@@ -384,7 +424,7 @@ namespace OmnivoreClassLibrary
             //    Link employeesLink = kvpEmps.Value;
             //}
 
-            TicketOpenItem ticketToCreate = new TicketOpenItem(ticket);
+            TicketOpenDTO ticketToCreate = new TicketOpenDTO(ticket);
 
             using (HttpClient client = new HttpClient())
             {
@@ -394,7 +434,9 @@ namespace OmnivoreClassLibrary
                 client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
 
                 string apiVersion = AppSettings.API_Version;
-                string json = JsonConvert.SerializeObject(ticketToCreate);
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                string json = JsonConvert.SerializeObject(ticketToCreate, settings);
                 StringContent stringContent = new StringContent(json);
                 HttpResponseMessage response = await client.PostAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/tickets"), stringContent);
                 if (response.IsSuccessStatusCode)
@@ -409,6 +451,129 @@ namespace OmnivoreClassLibrary
                         serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
 
                         output = loc.ToObject<Ticket>(serializer);
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<Ticket> AddTicketItems(string ticketId, List<TicketItem> ticketItemsToAdd)
+        {
+            Ticket output = null;
+
+            if (!String.IsNullOrEmpty(ticketId) && ticketItemsToAdd != null && ticketItemsToAdd.Count > 0)
+            {
+                List<TicketItemOpenDTO> ticketItemDTOs = new List<TicketItemOpenDTO>();
+                foreach (TicketItem item in ticketItemsToAdd)
+                {
+                    ticketItemDTOs.Add(new TicketItemOpenDTO(item));
+                }
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://api.omnivore.io/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                    string apiVersion = AppSettings.API_Version;
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
+                    settings.NullValueHandling = NullValueHandling.Ignore;
+                    string json = JsonConvert.SerializeObject(ticketItemDTOs, settings);
+                    StringContent stringContent = new StringContent(json);
+                    HttpResponseMessage response = await client.PostAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/", "tickets", "/", ticketId, "/", "items"), stringContent); // todo: fix how I build URL
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonString = await response.Content.ReadAsStringAsync();
+
+                        if (!String.IsNullOrEmpty(jsonString))
+                        {
+                            JObject loc = JObject.Parse(jsonString);
+
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                            output = loc.ToObject<Ticket>(serializer);
+                        }
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<PaymentStatus> MakePayment(string ticketId, PaymentDTO payment)
+        {
+            PaymentStatus output = null;
+
+            if (!String.IsNullOrEmpty(ticketId) && payment != null)
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://api.omnivore.io/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                    string apiVersion = AppSettings.API_Version;
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
+                    settings.NullValueHandling = NullValueHandling.Ignore;
+                    string json = JsonConvert.SerializeObject(payment, settings);
+                    StringContent stringContent = new StringContent(json);
+                    HttpResponseMessage response = await client.PostAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/", "tickets", "/", ticketId, "/", "payments"), stringContent); // todo: fix how I build URL
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonString = await response.Content.ReadAsStringAsync();
+
+                        if (!String.IsNullOrEmpty(jsonString))
+                        {
+                            JObject loc = JObject.Parse(jsonString);
+
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                            output = loc.ToObject<PaymentStatus>(serializer);
+                        }
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static async Task<PaymentStatus> MakePaymentThirdParty(string ticketId, PaymentThirdPartyDTO payment)
+        {
+            PaymentStatus output = null;
+
+            if (!String.IsNullOrEmpty(ticketId) && payment != null)
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://api.omnivore.io/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("Api-Key", AppSettings.API_Key); // add api key
+
+                    string apiVersion = AppSettings.API_Version;
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
+                    settings.NullValueHandling = NullValueHandling.Ignore;
+                    string json = JsonConvert.SerializeObject(payment, settings);
+                    StringContent stringContent = new StringContent(json);
+                    HttpResponseMessage response = await client.PostAsync(String.Concat(apiVersion, "/", "locations", "/", "zGibgKT9", "/", "tickets", "/", ticketId, "/", "payments"), stringContent); // todo: fix how I build URL
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonString = await response.Content.ReadAsStringAsync();
+
+                        if (!String.IsNullOrEmpty(jsonString))
+                        {
+                            JObject loc = JObject.Parse(jsonString);
+
+                            JsonSerializer serializer = new JsonSerializer();
+                            serializer.NullValueHandling = NullValueHandling.Ignore; // to skip setting null onto enums, especially
+
+                            output = loc.ToObject<PaymentStatus>(serializer);
+                        }
                     }
                 }
             }

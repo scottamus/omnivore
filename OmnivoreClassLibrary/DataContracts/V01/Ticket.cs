@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
-using OmnivoreClassLibrary.Helpers;
+using OmnivoreClassLibrary.JSONConverters;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
@@ -54,7 +54,7 @@ namespace OmnivoreClassLibrary.DataContracts.V01
         public Employee employee { get; set; }
         public List<TicketItem> items { get; set; }
         public OrderType order_type { get; set; }
-        public List<Payment> payments { get; set; }
+        public List<PaymentDTO> payments { get; set; }
         public RevenueCenter revenue_center { get; set; }
         public Table table { get; set; }
         public List<TicketItem> voided_items { get; set; }

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 
-namespace OmnivoreClassLibrary.Helpers
+namespace OmnivoreClassLibrary.JSONConverters
 {
     /// <summary>
     /// For converting from the int version of price in the Omnivore API (175),
