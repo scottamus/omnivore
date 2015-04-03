@@ -26,7 +26,6 @@ namespace OmnivoreClassLibrary
             return new System.Dynamic.ExpandoObject(); // todo: take out later once I've handled everything.
         }
 
-
         //POSSIBLE ERROR CODES
         //200 OK: The request was successful. 
         //400 Bad Request: The request was malformed - check to see if you sent all the required parameters. 

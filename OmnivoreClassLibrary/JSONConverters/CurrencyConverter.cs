@@ -100,7 +100,7 @@ namespace OmnivoreClassLibrary.JSONConverters
         /// </summary>
         /// <param name="d">The d.</param>
         /// <returns></returns>
-        private bool IsValidDecimal(decimal d)
+        public bool IsValidDecimal(decimal d)
         {
             return decimal.Round(d, 2) == d;
         }
