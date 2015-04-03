@@ -7,16 +7,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using OmnivoreClassLibrary.JSONConverters;
-using OmnivoreClassLibrary.DataContracts.V01.Enums;
 
 namespace OmnivoreClassLibrary.DataContracts.V01
 {
-    public class TenderType : OmnivoreBase
+    public class TicketItemModifier : ModifierBase
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonProperty("_embedded")]
+        public EmbeddedMenuItemModifier EmbeddedMenuItemModifier { get; set; }
+    }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+    public class EmbeddedMenuItemModifier
+    {
+        public MenuItemModifier menu_modifier { get; set; }
     }
 }

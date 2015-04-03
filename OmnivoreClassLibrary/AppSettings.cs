@@ -23,5 +23,10 @@ namespace OmnivoreClassLibrary
         {
             get { return ConfigurationManager.AppSettings["DefaultLocationId"]; }
         }
+
+        public static string RootAddress
+        {
+            get { return ConfigurationManager.AppSettings["RootAddress"]; }
+        }
     }
 }

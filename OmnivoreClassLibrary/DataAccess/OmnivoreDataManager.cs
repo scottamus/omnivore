@@ -9,7 +9,7 @@ using OmnivoreClassLibrary.Interfaces;
 
 namespace OmnivoreClassLibrary.DataAccess
 {
-    public class OmnivoreDataManager
+    public class OmnivoreDataManager // todo: make internal later?
     {
         private IOmnivoreRepository _repo;
 
@@ -19,8 +19,10 @@ namespace OmnivoreClassLibrary.DataAccess
         /// easier on the client application.
         /// </summary>
         public OmnivoreDataManager()
+            : this(new OmnivoreRepository())
         {
-            this._repo = new OmnivoreRepository(); // use the real one by default.  I might refactor later to use IoC with Unity, but I'm not sure how bootstrapping Únity works in a class library, as opposed to a web site or console app, so Im leaving that alone for now and will revisit if I have time.
+            // use the real one by default.  I might refactor later to use IoC with Unity, but I'm not sure how bootstrapping 
+            // Únity works in a class library, as opposed to a web site or console app, so Im leaving that alone for now and will revisit if I have time.
         }
 
         /// <summary>
@@ -34,15 +36,29 @@ namespace OmnivoreClassLibrary.DataAccess
         }
 
         /// <summary>
-        /// Gets the omnivore collection.
+        /// Gets the omnivore object.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url">The URL.</param>
         /// <returns></returns>
-        public async Task<T> GetOmnivoreCollection<T>(string url)
-            where T : OmnivoreCollectionBase
+        public async Task<T> GetOmnivoreObject<T>(string url)
+            where T : OmnivoreBase
         {
-            return await this._repo.GetOmnivoreCollection<T>(url);
+            return await this._repo.GetOmnivoreObject<T>(url);
+        }
+
+        /// <summary>
+        /// Posts the omnivore object.
+        /// </summary>
+        /// <typeparam name="T">The item to be added/posted.  Should already be converted to a DTO if necessary.</typeparam>
+        /// <typeparam name="U">The return type.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="itemToPost">The item to post.</param>
+        /// <returns></returns>
+        public async Task<U> PostOmnivoreObject<T, U>(string url, T itemToPost) 
+            where U : OmnivoreBase
+        {
+            return await this._repo.PostOmnivoreObject<T, U>(url, itemToPost);
         }
     }
 }
