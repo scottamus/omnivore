@@ -61,6 +61,15 @@ namespace OmnivoreClassLibraryTests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {&quot;_embedded&quot;: {&quot;discounts&quot;: [], &quot;employee&quot;: {&quot;_links&quot;: {&quot;self&quot;: {&quot;etag&quot;: &quot;934d3a9ae389e3279fd443cdb05f80cc&quot;, &quot;href&quot;: &quot;https://api.omnivore.io/0.1/locations/zGibgKT9/employees/BdTaKT4X/&quot;, &quot;profile&quot;: &quot;https://panel.omnivore.io/docs/api#employee_retrieve&quot;}}, &quot;check_name&quot;: &quot;Bob&quot;, &quot;first_name&quot;: &quot;Bob&quot;, &quot;id&quot;: &quot;BdTaKT4X&quot;, &quot;last_name&quot;: &quot;Belcher&quot;, &quot;login&quot;: &quot;100&quot;}, &quot;items&quot;: [{&quot;_embedded&quot;: {&quot;discounts&quot;: [], &quot;menu_item&quot;: {&quot;_links&quot;: {&quot;modifier_groups&quot;: {&quot;etag&quot;: &quot;ebbcdef0a0dc1c09f4ac530780a7beb6&quot;, &quot;href&quot;: &quot;https://api.omn [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AddTicketItemsResponse {
+            get {
+                return ResourceManager.GetString("AddTicketItemsResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {&quot;_links&quot;: {&quot;self&quot;: {&quot;href&quot;: &quot;https://api.omnivore.io/&quot;}}, &quot;versions&quot;: [{&quot;deprecation_date&quot;: null, &quot;href&quot;: &quot;https://api.omnivore.io/0.1/&quot;, &quot;major&quot;: 0, &quot;minor&quot;: 1, &quot;release_date&quot;: &quot;2013-01-01&quot;, &quot;retirement_date&quot;: null, &quot;status&quot;: &quot;alpha&quot;}]}.
         /// </summary>
         internal static string Base {
@@ -124,11 +133,29 @@ namespace OmnivoreClassLibraryTests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {&quot;_embedded&quot;: {&quot;discounts&quot;: [], &quot;employee&quot;: {&quot;_links&quot;: {&quot;self&quot;: {&quot;etag&quot;: &quot;934d3a9ae389e3279fd443cdb05f80cc&quot;, &quot;href&quot;: &quot;https://api.omnivore.io/0.1/locations/zGibgKT9/employees/BdTaKT4X/&quot;, &quot;profile&quot;: &quot;https://panel.omnivore.io/docs/api#employee_retrieve&quot;}}, &quot;check_name&quot;: &quot;Bob&quot;, &quot;first_name&quot;: &quot;Bob&quot;, &quot;id&quot;: &quot;BdTaKT4X&quot;, &quot;last_name&quot;: &quot;Belcher&quot;, &quot;login&quot;: &quot;100&quot;}, &quot;items&quot;: [], &quot;order_type&quot;: {&quot;_links&quot;: {&quot;self&quot;: {&quot;etag&quot;: &quot;f734af98716581abbfd84b0fc068ade7&quot;, &quot;href&quot;: &quot;https://api.omnivore.io/0.1/locations/zGibgKT9/order_t [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string OpenTicketResponse {
+            get {
+                return ResourceManager.GetString("OpenTicketResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {&quot;_embedded&quot;: {&quot;order_types&quot;: [{&quot;_links&quot;: {&quot;self&quot;: {&quot;etag&quot;: &quot;f734af98716581abbfd84b0fc068ade7&quot;, &quot;href&quot;: &quot;https://api.omnivore.io/0.1/locations/zGibgKT9/order_types/KxiAaip5/&quot;, &quot;profile&quot;: &quot;https://panel.omnivore.io/docs/api#order-type_retrieve&quot;}}, &quot;available&quot;: true, &quot;id&quot;: &quot;KxiAaip5&quot;, &quot;name&quot;: &quot;Eat In&quot;}, {&quot;_links&quot;: {&quot;self&quot;: {&quot;etag&quot;: &quot;fec7d96848d0cb4cdceb7ef24ce6c0d0&quot;, &quot;href&quot;: &quot;https://api.omnivore.io/0.1/locations/zGibgKT9/order_types/jLTqoTba/&quot;, &quot;profile&quot;: &quot;https://panel.omnivore.io/docs/api#order-type_retrie [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OrderTypes {
             get {
                 return ResourceManager.GetString("OrderTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {&quot;amount_paid&quot;: 2153,&quot;accepted&quot;: true,&quot;ticket_closed&quot;: true,&quot;balance_remaining&quot;: 0,&quot;type&quot;: &quot;card_present&quot;}.
+        /// </summary>
+        internal static string PaymentStatusResponse {
+            get {
+                return ResourceManager.GetString("PaymentStatusResponse", resourceCulture);
             }
         }
         

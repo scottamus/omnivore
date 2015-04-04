@@ -239,7 +239,7 @@ namespace OmnivoreClassLibrary.BusinessDomain
         {
             string apiVersion = AppSettings.API_Version;
             string defaultLocationId = AppSettings.DefaultLocationId;
-            return String.Concat(BaseUrl, _slash, apiVersion, _slash, _locations, _slash, defaultLocationId, _slash, _menu, _slash, "items", _slash, menuItemId, _slash, "modifier_groups");
+            return String.Concat(BaseUrl, _slash, apiVersion, _slash, _locations, _slash, defaultLocationId, _slash, _menu, _slash, "items", _slash, menuItemId, _slash, "modifier_groups", _slash);
         }
 
         // POSTS

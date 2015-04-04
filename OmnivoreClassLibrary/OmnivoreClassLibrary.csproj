@@ -96,7 +96,6 @@
     <Compile Include="Interfaces\IOmnivoreRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseHandler.cs" />
-    <Compile Include="TestConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
